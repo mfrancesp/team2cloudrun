@@ -9,9 +9,9 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 SERVICE_ACCOUNT="p265126880907-keyiyh@gcp-sa-cloud-sql.iam.gserviceaccount.com"
-PASSWORD ="dreamteam"
+PASSWORD ="secretpassword"
 PUBLIC_IP_ADDRESS ="34.77.51.214"
-DBNAME ="simple-app-db"
+DBNAME ="poll-database"
 PROJECT_ID ="cloudrunproject-group2"
 INSTANCE_NAME ="cloudrunproject-group2:europe-west1:simple-app-db"
 #SQLALCHEMY_DATABASE_URI = f'psql+psqldb://root:{PASSWORD}@{PUBLIC_IP_ADDRESS}/{DBNAME}?unix_socket=/cloudsql/{PROJECT_ID}:{INSTANCE_NAME}'

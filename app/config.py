@@ -4,9 +4,9 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 class Config(object):
         
 
-    PASSWORD ="dreamteam"
+    PASSWORD ="secretpassword"
     PUBLIC_IP_ADDRESS ="34.77.51.214"
-    DBNAME ="simple-app-db"
+    DBNAME ="poll-database"
     PROJECT_ID ="cloudrunproject-group2"
     INSTANCE_NAME ="cloudrunproject-group2:europe-west1:simple-app-db"
     SERVICE_ACCOUNT="p265126880907-keyiyh@gcp-sa-cloud-sql.iam.gserviceaccount.com"
