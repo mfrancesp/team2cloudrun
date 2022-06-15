@@ -1,38 +1,35 @@
 from flask import Flask
-from app.config import Config
+import pymysql 
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy import create_engine
 
 app = Flask(__name__)
-app.config.from_object(Config)
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
-SERVICE_ACCOUNT="p265126880907-keyiyh@gcp-sa-cloud-sql.iam.gserviceaccount.com"
+
+
+# Google Cloud SQL (change this accordingly)
 PASSWORD ="secretpassword"
-PUBLIC_IP_ADDRESS ="34.77.51.214"
-DBNAME ="poll-database"
-PROJECT_ID ="cloudrunproject-group2"
-INSTANCE_NAME ="cloudrunproject-group2:europe-west1:simple-app-db"
-#SQLALCHEMY_DATABASE_URI = f'psql+psqldb://root:{PASSWORD}@{PUBLIC_IP_ADDRESS}/{DBNAME}?unix_socket=/cloudsql/{PROJECT_ID}:{INSTANCE_NAME}'
-
-SQLALCHEMY_DATABASE_URI = f"postgresql+psycopg2://{SERVICE_ACCOUNT}:{PASSWORD}@/{DBNAME}?host=/cloudsql/{PROJECT_ID}:europe-west1:{DBNAME}=tcp:5432"
-#PASSWORD ="dreamteam"
-#PUBLIC_IP_ADDRESS ="34.77.51.214"
-#DBNAME ="simple-app-db"
-#PROJECT_ID ="cloudrunproject-group2"
-#INSTANCE_NAME ="cloudrunproject-group2:europe-west1:simple-app-db"
-#SQLALCHEMY_DATABASE_URI = f'psql+psqldb://root:{PASSWORD}@{PUBLIC_IP_ADDRESS}/{DBNAME}?unix_socket=/cloudsql/{PROJECT_ID}:{INSTANCE_NAME}'
-
-
+PUBLIC_IP_ADDRESS ="35.205.41.62"
+DBNAME ="testing"
+PROJECT_ID ="team2-353417"
+INSTANCE_NAME ="databaseuser"
+ 
 # configuration
-#app.config["SECRET_KEY"] = "LCi3laZzkuFwmATf2+APAKzW5sEZxSRjibYEW89x"
-#app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
-#app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
+app.config["SECRET_KEY"] = "secretpassword"
+app.config["SQLALCHEMY_DATABASE_URI"]= f"mysql+pymysql://root:{PASSWORD}@{PUBLIC_IP_ADDRESS}/{DBNAME}?unix_socket=/cloudsql/{PROJECT_ID}:{INSTANCE_NAME}"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]= True
+ 
+db = SQLAlchemy(app)
 
+class data(db.Model):
+    id = db.Column(db.Integer, primary_key = True, nullable = False)
+    tittle = db.Column(db.String(64), nullable = False)
+    description = db.Column(db.String(120), nullable = False, unique = True)
+    status = db.Column(db.Boolean())
+    
+#db.create_all()
 
+engine = create_engine(f"mysql+pymysql://root:{PASSWORD}@{PUBLIC_IP_ADDRESS}/{DBNAME}?unix_socket =/cloudsql/{PROJECT_ID}:{INSTANCE_NAME}")
 
-engine = create_engine(SQLALCHEMY_DATABASE_URI)
-
-
+#connection=create_engine.connect()
 from app import routes, models

@@ -1,11 +1,11 @@
 from flask import render_template, request, redirect
 from app import app, db
-from app.models import Entry
-
+from app.models import dates
+import socket
 jedi = "of the jedi"
 
 @app.route('/')
-@app.route('/index')
+@app.route('/index', methods=['GET'])
 def index():
     # entries = [
     #     {
@@ -21,8 +21,11 @@ def index():
     #         'status': False
     #     }
     # ]
-    entries = Entry.query.all()
-    return render_template('index.html', entries=entries)
+    try:
+        entries = dates.query.all()
+        return render_template('index.html', entries=entries)
+    except socket.error:
+        return False
 
 @app.route('/add', methods=['POST'])
 def add():
@@ -31,7 +34,7 @@ def add():
         title = form.get('title')
         description = form.get('description')
         if not title or description:
-            entry = Entry(title = title, description = description)
+            entry = dates(title = title, description = description)
             db.session.add(entry)
             db.session.commit()
             return redirect('/')
@@ -41,7 +44,7 @@ def add():
 @app.route('/update/<int:id>')
 def updateRoute(id):
     if not id or id != 0:
-        entry = Entry.query.get(id)
+        entry = dates.query.get(id)
         if entry:
             return render_template('update.html', entry=entry)
 
@@ -50,7 +53,7 @@ def updateRoute(id):
 @app.route('/update/<int:id>', methods=['POST'])
 def update(id):
     if not id or id != 0:
-        entry = Entry.query.get(id)
+        entry = dates.query.get(id)
         if entry:
             form = request.form
             title = form.get('title')
@@ -67,7 +70,7 @@ def update(id):
 @app.route('/delete/<int:id>')
 def delete(id):
     if not id or id != 0:
-        entry = Entry.query.get(id)
+        entry = dates.query.get(id)
         if entry:
             db.session.delete(entry)
             db.session.commit()
@@ -78,7 +81,7 @@ def delete(id):
 @app.route('/turn/<int:id>')
 def turn(id):
     if not id or id != 0:
-        entry = Entry.query.get(id)
+        entry = dates.query.get(id)
         if entry:
             entry.status = not entry.status
             db.session.commit()
@@ -86,6 +89,6 @@ def turn(id):
 
     return "of the jedi"
 
-# @app.errorhandler(Exception)
-# def error_page(e):
-#     return "of the jedi"
+@app.errorhandler(Exception)
+def error_page(e):
+    return "error"
