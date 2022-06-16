@@ -1,35 +1,32 @@
 from flask import Flask
-import pymysql 
+from app.config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy import create_engine
+#import mysql.connector
 
 app = Flask(__name__)
-
-
-# Google Cloud SQL (change this accordingly)
 PASSWORD ="secretpassword"
 PUBLIC_IP_ADDRESS ="35.205.41.62"
 DBNAME ="testing"
 PROJECT_ID ="team2-353417"
-INSTANCE_NAME ="databaseuser"
- 
+INSTANCE_NAME ="team2-353417:europe-west1:databaseuser"
+SQLALCHEMY_DATABASE_URI = f'mysql+mysqldb://root:{PASSWORD}@{PUBLIC_IP_ADDRESS}/{DBNAME}?unix_socket=/cloudsql/{PROJECT_ID}:{INSTANCE_NAME}'
 # configuration
-app.config["SECRET_KEY"] = "secretpassword"
-app.config["SQLALCHEMY_DATABASE_URI"]= f"mysql+pymysql://root:{PASSWORD}@{PUBLIC_IP_ADDRESS}/{DBNAME}?unix_socket=/cloudsql/{PROJECT_ID}:{INSTANCE_NAME}"
+app.config["SECRET_KEY"] = "zwBhXws0knq7dZ6f0ciIK3fl5cefusJRtFEiU5Hi"
+app.config["SQLALCHEMY_DATABASE_URI"]= SQLALCHEMY_DATABASE_URI
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]= True
- 
-db = SQLAlchemy(app)
 
-class data(db.Model):
-    id = db.Column(db.Integer, primary_key = True, nullable = False)
-    tittle = db.Column(db.String(64), nullable = False)
-    description = db.Column(db.String(120), nullable = False, unique = True)
-    status = db.Column(db.Boolean())
+
+#db = SQLAlchemy(app)
+
+
     
 #db.create_all()
 
-engine = create_engine(f"mysql+pymysql://root:{PASSWORD}@{PUBLIC_IP_ADDRESS}/{DBNAME}?unix_socket =/cloudsql/{PROJECT_ID}:{INSTANCE_NAME}")
-
+engine = create_engine(SQLALCHEMY_DATABASE_URI)
+#connection = mysql.connector.connect(user='root',password='secretpassword', host='35.205.41.62',datase='testing')
 #connection=create_engine.connect()
+#cursor=connection.cursor()
+connection=engine.connect()
 from app import routes, models
