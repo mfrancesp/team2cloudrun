@@ -5,8 +5,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import render_template, request, redirect
 from flask_migrate import Migrate
 from sqlalchemy import create_engine
-#import mysql.connector
 
+import mysql.connector
+from mysql.connector import Error
 app = Flask(__name__)
 PASSWORD ="secretpassword"
 PUBLIC_IP_ADDRESS ="35.205.41.62"
@@ -19,6 +20,7 @@ app.config["SECRET_KEY"] = "zwBhXws0knq7dZ6f0ciIK3fl5cefusJRtFEiU5Hi"
 app.config["SQLALCHEMY_DATABASE_URI"]= SQLALCHEMY_DATABASE_URI
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]= True
 
+ 
 
 db = SQLAlchemy(app)
 class dates(db.Model):
@@ -31,12 +33,31 @@ class dates(db.Model):
 
     
 db.create_all()
+try:
+    connection = mysql.connector.connect(host=PUBLIC_IP_ADDRESS,
+                                         database='testing',
+                                         user='root',
+                                         password='secretpassword')
+    if connection.is_connected():
+        db_Info = connection.get_server_info()
+        print("Connected to MySQL Server version ", db_Info)
+        cursor = connection.cursor()
+        cursor.execute("select database();")
+        record = cursor.fetchone()
+        print("You're connected to database: ", record)
+        insert_brochure_query = """
+            SELECT * FROM dates
+            """
+    
+        entries=cursor.execute(insert_brochure_query)
+except Error as e:
+    print("Error while connecting to MySQL", e)
 
-engine = create_engine(SQLALCHEMY_DATABASE_URI)
+#engine = create_engine(SQLALCHEMY_DATABASE_URI)
 #connection = mysql.connector.connect(user='root',password='secretpassword', host='35.205.41.62',datase='testing')
 #connection=create_engine.connect()
 #cursor=connection.cursor()
-connection=engine.connect()
+
 
 
 @app.route('/')
@@ -59,9 +80,9 @@ def index():
     insert_brochure_query = """
     SELECT * FROM dates
     """
-    with engine.connect() as connection:
-        entries=connection.execute(insert_brochure_query)
-        return render_template('index.html', entries=entries)
+    
+    #entries=connection.execute(insert_brochure_query)
+    return render_template('index.html', entries=entries)
 
     #entries = connection.query.all()
     #return render_template('index.html', entries=entries)
