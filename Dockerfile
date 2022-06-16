@@ -6,7 +6,7 @@ FROM python:3.9
 ENV PYTHONUNBUFFERED True
 
 # Copy local code to the container image.
-ENV APP_HOME /crudapp
+ENV APP_HOME /app
 WORKDIR $APP_HOME
 COPY . ./
 
