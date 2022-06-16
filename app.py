@@ -1,3 +1,4 @@
+from os import error
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask import render_template, request, redirect
@@ -62,24 +63,28 @@ def turn(id):
             connection.execute(query_turn)
             return redirect('/')
 
-@app.route('/update/<int:id>', methods=['POST', 'GET'])
-def update(id):
-    if request.method == 'POST':
-        if not id or id != 0:
-            form=request.form
-            title=str(form.get('title'))
-            description=str(form.get('description'))
-            
-            query_insert="UPDATES dates SET tittle='%s', description='%s'WHERE id=%s;" % (title,description,id)
-            with engine.connect() as connection:
-                connection.execute(query_insert)
-                return redirect('/')
-    if request.method=='GET':
-        with engine.connect() as connection:
-                entry=connection.execute("SELECT * FROM dates WHERE id=%s" %(id))
-                return render_template('update.html', entry=entry)
-       
+@app.route('/update/<int:id>')
+def updateRote(id):
+    with engine.connect() as connection:
+        entry=connection.execute("SELECT * FROM dates WHERE id=%s" %(id))
+        return render_template('update.html', entry=entry)
 
+
+@app.route('/update/<int:id>', methods=['POST'])
+def update(id):
+    print(id)
+    if request.method == 'POST': 
+        form=request.form
+        title=str(form.get('title'))
+        print(title)
+        description=str(form.get('description'))
+            
+        query_insert="UPDATES dates SET tittle='%s', description='%s'WHERE id=%s;" % (title,description,id)
+        with engine.connect() as connection:
+            connection.execute(query_insert)
+            return redirect('/')
+    
+    return error
 if __name__ == '__main__':
     app.run(debug=True)
 
