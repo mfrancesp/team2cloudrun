@@ -29,7 +29,7 @@ def start():
     query="SELECT * FROM dates"
     with engine.connect() as connection:
         entries=connection.execute(query).fetchall()
-        
+        print(entries)
         return render_template('index.html', entries=entries)
 
 @app.route('/add', methods=['POST'])
