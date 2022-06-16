@@ -11,7 +11,7 @@ from mysql.connector import Error
 app = Flask(__name__)
 PASSWORD ="secretpassword"
 PUBLIC_IP_ADDRESS ="35.205.41.62"
-DBNAME ="testing"
+DBNAME ="databaseuser"
 PROJECT_ID ="team2-353417"
 INSTANCE_NAME ="team2-353417:europe-west1:databaseuser"
 SQLALCHEMY_DATABASE_URI = f'mysql+mysqldb://root:{PASSWORD}@{PUBLIC_IP_ADDRESS}/{DBNAME}?unix_socket=/cloudsql/{PROJECT_ID}:{INSTANCE_NAME}'
