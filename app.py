@@ -150,9 +150,7 @@ def turn(id):
 
     return "of the jedi"
 
-@app.errorhandler(Exception)
-def error_page(e):
-    return "error"
+
 
 if __name__ == '__main__':
     app.run()
