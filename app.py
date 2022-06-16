@@ -15,11 +15,10 @@ db_password = "1234"
 db_name = "testing"
 db_connection_name = "team2-353417:europe-west1:databaseuser"
 host = "35.205.41.62"
-unix_socket = '/cloudsql/{}'.format(db_connection_name)
-engine_url = 'mysql+pymysql://{}:{}@/{}?unix_socket={}'.format(
-        db_user, db_password, db_name, unix_socket)
+#unix_socket = '/cloudsql/{}'.format(db_connection_name)
+#engine_url = 'mysql+pymysql://{}:{}@/{}?unix_socket={}'.format(db_user, db_password, db_name, unix_socket)
 
-#engine_url = 'mysql+pymysql://{}:{}@{}/{}'.format(db_user, db_password, host, db_name)
+engine_url = 'mysql+pymysql://{}:{}@{}/{}'.format(db_user, db_password, host, db_name)
 
 engine = create_engine(engine_url)
 
