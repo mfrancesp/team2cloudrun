@@ -23,7 +23,8 @@ engine_url = 'mysql+pymysql://{}:{}@{}/{}'.format(db_user, db_password, host, db
 
 engine = create_engine(engine_url)
 
-
+class data:
+    id=0
 
 @app.route('/')
 def start():
@@ -47,6 +48,7 @@ def add():
 
 @app.route('/delete/<int:id>')
 def delete(id):
+    id=data.id
     print(id)
     if not id or id != 0:
         
@@ -63,28 +65,33 @@ def turn(id):
             connection.execute(query_turn)
             return redirect('/')
 
-@app.route('/update/<int:id>')
-def updateRote(id):
-    with engine.connect() as connection:
-        entry=connection.execute("SELECT * FROM dates WHERE id=%s" %(id))
-        return render_template('update.html', entry=entry)
 
 
-@app.route('/update/<int:id>', methods=['POST'])
+@app.route('/update/<int:id>', methods=['POST','GET'])
 def update(id):
-    print(id)
-    if request.method == 'POST': 
+
+        data.id=id
+        print(id)
+        with engine.connect() as connection:
+            entry=connection.execute("SELECT * FROM dates WHERE id=%s" %(id))
+            return render_template('update.html', entry=entry)
+
+@app.route('/update/', methods=['POST'])
+def update_post():
+    
+        id=data.id
         form=request.form
         title=str(form.get('title'))
         print(title)
         description=str(form.get('description'))
             
-        query_insert="UPDATES dates SET tittle='%s', description='%s'WHERE id=%s;" % (title,description,id)
+        query_insert="UPDATE dates SET tittle='%s', description='%s'WHERE id=%s;" % (title,description,id)
         with engine.connect() as connection:
             connection.execute(query_insert)
             return redirect('/')
+
+
     
-    return error
 if __name__ == '__main__':
     app.run(debug=True)
 
