@@ -41,7 +41,8 @@
                     <td><strong>{{ entry.tittle }}</strong></td>
                     <td>{{ entry.description }}</td>
                     <td>
-                        <a class="{{ 'btn btn-success' if entry.status else 'btn btn-dark'}}"
+                        
+                        <a class="{{ 'btn btn-outline-secondary' if entry.status else 'btn btn-dark'}}"
                            href="/turn/{{ entry.id }}">
                             Bought
                         </a>
@@ -49,7 +50,7 @@
                            href="/delete/{{ entry.id }}">
                             Delete
                         </a>
-                        <a class="btn btn-info"
+                        <a class="btn btn-success"
                            href="/update/{{ entry.id }}">
                             Edit
                         </a>
